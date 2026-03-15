@@ -777,12 +777,10 @@
   }
   animateRing();
 
-  // Scroll reveal
+  // Scroll reveal — robust version
   const reveals = document.querySelectorAll('.reveal');
-  reveals.forEach(el => el.classList.add('visible'));
 
   if ('IntersectionObserver' in window) {
-    reveals.forEach(el => el.classList.remove('visible'));
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry, i) => {
         if (entry.isIntersecting) {
@@ -791,7 +789,17 @@
         }
       });
     }, { threshold: 0.05, rootMargin: '0px 0px -30px 0px' });
-    reveals.forEach(el => observer.observe(el));
+
+    reveals.forEach(el => {
+      const rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight) {
+        el.classList.add('visible');
+      } else {
+        observer.observe(el);
+      }
+    });
+  } else {
+    reveals.forEach(el => el.classList.add('visible'));
   }
 </script>
 </body>

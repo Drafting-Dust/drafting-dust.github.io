@@ -901,7 +901,7 @@
 <section class="contact" id="contact" style="border-top: none;">
   <p class="contact-eyebrow">Available for Projects &amp; Collaboration</p>
   <h2 class="contact-headline">Let's Work<br>Together</h2>
-  <a href="/cdn-cgi/l/email-protection#721a1311190032030717171c015c171607" class="contact-email"><span class="__cf_email__" data-cfemail="3a525b5951487a4b4f5f5f5449145f5e4f">[email&#160;protected]</span></a>
+  <a href="/cdn-cgi/l/email-protection#036b6260687143727666666d702d666776" class="contact-email"><span class="__cf_email__" data-cfemail="6f070e0c041d2f1e1a0a0a011c410a0b1a">[email&#160;protected]</span></a>
   <div class="contact-links">
     <a href="https://www.linkedin.com/in/reaganhack" target="_blank" class="contact-link">LinkedIn</a>
     <a href="https://github.com/Drafting-Dust" target="_blank" class="contact-link">GitHub</a>
@@ -911,7 +911,7 @@
 
 <!-- FOOTER -->
 <footer>
-  <span>© 2025 Reagan Hack</span>
+  <span>© 2026 Reagan Hack</span>
   <span>Interior Architecture + Design — Queens University of Charlotte</span>
 </footer>
 
@@ -953,18 +953,35 @@
     });
   });
 
-  // Scroll reveal - fixed for GitHub Pages
+
+  // Scroll reveal — robust version
+  // Only animate elements NOT already in the viewport on load; show those immediately
   const reveals = document.querySelectorAll('.reveal');
 
-  // Immediately show all as fallback
-  reveals.forEach(el => el.classList.add('visible'));
-
   if ('IntersectionObserver' in window) {
-    reveals.forEach(el => {
-      el.classList.remove('visible');
-    });
-
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry, i) => {
         if (entry.isIntersecting) {
-          setTimeout(() => entry.target.clas
+          setTimeout(() => entry.target.classList.add('visible'), i * 60);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.05, rootMargin: '0px 0px -30px 0px' });
+
+    reveals.forEach(el => {
+      const rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight) {
+        // Already visible on load — show immediately, no animation
+        el.classList.add('visible');
+      } else {
+        observer.observe(el);
+      }
+    });
+  } else {
+    // Fallback: show everything
+    reveals.forEach(el => el.classList.add('visible'));
+  }
+
+</script>
+</body>
+</html>
